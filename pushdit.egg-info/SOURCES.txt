@@ -5,6 +5,8 @@ Pipfile.lock
 README.md
 pyproject.toml
 setup.py
+dist/pushdit-0.0.5-py3-none-any.whl
+dist/pushdit-0.0.5.tar.gz
 pushdit/__init__.py
 pushdit/pushit.py
 pushdit.egg-info/PKG-INFO

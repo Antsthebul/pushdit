@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding="utf=8") as fh:
 
 setuptools.setup(
     name = "pushdit",
-    version = "0.0.5",
+    version = "0.0.6",
     author = "Antsthebul",
     author_email = "anthony.allen.srt@gmail.com",
     description = "pushd command like Linux",
@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public",
+        "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: OS Independent"
     ],
     python_require = '>=python3.6'
