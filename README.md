@@ -1,4 +1,17 @@
-# Usage of **pushd**, **popd**, **pushit**
+# Usage of the **pushdit** module
+
+ **pushd**, **popd**, **pushit**
+
+To install run the following command
+```python
+pip install pushdit
+```
+To properly import use the following
+```
+from pushdit import pushd, popd, pushit
+```
+
+
 
 **pushd** is a tool that stores directories in a queue. <b>Directories MUST EXIST. </b>This works in a similar fashion to the linux pushd command. `pushd` will echo the CWD as well as the directories that have been added to the queue. This is similar to the operatation of the  `dirs` linux command. The list of directories that `pushd` echoes, will be displayed in the order they were inserted, <b>0</b> being most recent. This is the order they will be *popped* on default operation, when calling `popd()`. 
 ```

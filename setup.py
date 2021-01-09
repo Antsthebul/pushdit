@@ -5,17 +5,17 @@ with open('README.md', 'r', encoding="utf=8") as fh:
 
 setuptools.setup(
     name = "pushdit",
-    version = "0.0.2",
+    version = "0.0.5",
     author = "Antsthebul",
     author_email = "anthony.allen.srt@gmail.com",
     description = "pushd command like Linux",
     long_description = long_description,
     long_description_content_type = 'text/markdown',
-    url = "",
+    url = "https://github.com/Antsthebul/pushdit",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: GNU General Public",
         "Operating System :: OS Independent"
     ],
     python_require = '>=python3.6'

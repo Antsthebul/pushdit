@@ -10,6 +10,7 @@ twine = "*"
 pushdit = {editable = true, path = "."}
 
 [dev-packages]
+check-manifest = "*"
 
 [requires]
 python_version = "3.8"
