@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding="utf=8") as fh:
 
 setuptools.setup(
     name = "pushdit",
-    version = "0.0.6",
+    version = "0.0.7",
     author = "Antsthebul",
     author_email = "anthony.allen.srt@gmail.com",
     description = "pushd command like Linux",

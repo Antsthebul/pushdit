@@ -6,3 +6,6 @@ __pycache__/
 
 # Auto-generated
 PKG-INFO
+
+# Test
+tests/

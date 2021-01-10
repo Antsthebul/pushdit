@@ -1,39 +1,198 @@
-# Usage of the **pushdit** module
+# **pushdit** 
 
- **pushd**, **popd**, **pushit**
-
-To install run the following command
+## ***Installation***
 ```python
 pip install pushdit
 ```
-To properly import use the following
-```
+
+
+## ***Import***
+
+
+```python
 from pushdit import pushd, popd, pushit
 ```
 
-
-
-**pushd** is a tool that stores directories in a queue. <b>Directories MUST EXIST. </b>This works in a similar fashion to the linux pushd command. `pushd` will echo the CWD as well as the directories that have been added to the queue. This is similar to the operatation of the  `dirs` linux command. The list of directories that `pushd` echoes, will be displayed in the order they were inserted, <b>0</b> being most recent. This is the order they will be *popped* on default operation, when calling `popd()`. 
-```
->>> pushd('pushtest1', chdir=False)
-
->>> pushd('pushtest', right=True, chdir=False)
+## ***Features***
+---
+### **pushd**:
+-   Tool that stores directories in a queue
+-   <b>Directory path MUST EXIST </b> or *FileNotFoundError*
+-   CWD will always be placed at the end of the queue
+  
+```python
+import os
 
 >>> pushd
-- C:\Users\Antsthebul\Desktop\home;
-0 home
-1 pushtest1
-2 pushtest
-```
-The way to use pushd is like pushd in linux. 
-```
->>> pushd('pushtest')
+- C:\Users\Antsthebul\Desktop\pushit;
+>>> pushd('tests') 
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit\tests;
+0 tests
+1 pushit
+>>> os.getcwd()
+'C:\\Users\\Antsthebul\\Desktop\\pushit\\tests'
 ```
 
-The advantage is the functionality of adding dirs to the front or back of the queue.
+
+Instead of having to use a seperate command to view CWD AND directory queue, `pushd` will echo the CWD as well as the directories that have been added to the queue. This is similar operation to the  `pushd` and `dirs` commands in *Linux*. The list of directories that `pushd` echoes, will be displayed in the order they were inserted, <b>0</b> being most recent. This is the order they will be *switched* to on default operation when using `pushit()` as a contenxtmanager, otherwise when calling `popd()`, will remove dir from back of queue. 
+
+When `pushd` recives a *<..directory..>*, unless specified pushd will move program to that directory. See examples below.. 
+
+## *Adding* to 'front' of queue *(Default)*
+```python
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit;
+>>> pushd('tests/pushtest1')
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit\tests\pushtest1;
+0 pushtest1
+1 pushit
 ```
->>> pushd('pushtest/pushtest1', right=True)
+
+### *Adding* to end of queue 
+```python
+
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit;
+
+>>> pushd('tests/pushtest1', right=True)
+
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit\tests\pushtest1;
+0 pushit
+1 pushtest1
+
+>>> os.getcwd()
+'C:\\Users\\Antsthebul\\Desktop\\pushit\\tests\\pushtest1'
 ```
-Now type `popd()` to simply remove the directoriy at the end of the queue or use specify if you want to remove the dir at the front. Use pushit() [no args] in a context manger and it will change to the dir next in the queue and remove that dir from the queue while staying inside the cwd. pushit( <..file>) in a context manager is also ok too, this dir will be the dir used. It supports nested with-statements to allow to easily run code in different locations of the stack and returning to the cwd at the end of the outher-mostl with block.
- 
-For-loops can be used to allow no dir change and no removal For a in pushd
+
+## *Preventing* directory change
+```python
+>>> pushd('pushtest2', chdir=False) # was in tests\pushtest1 when called
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit\tests\pushtest1;
+0 pushtest2
+1 pushit
+2 pushtest1 
+```
+## *Clear* entire queue and return to inital location of call (cwd @ runtime)
+```python
+>>> pushd.clear() 
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit;
+```
+
+## *Relative* paths ok!
+```python
+>>> pushd('tests/pushtest1/pushtest2')
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit\tests\pushtest1\pushtest2;
+0 pushtest2
+1 pushit
+
+>>> pushd('../..')
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit\tests;
+0 tests
+1 pushtest2
+2 pushit
+
+```
+
+## Even this...***thing***..
+```python
+>>> pushd
+- C:\Users\Ansthebul\Desktop\pushit;
+>>> pushd('~/documents') 
+>>> pushd
+- C:\Users\Ansthebul\documents;
+0 documents
+1 pushit
+```
+---
+### **popd**
+## *Remove* single directory from back of queue, like pop() 
+```python
+>>> pushd('pushtest2', chdir=False)
+>>> popd()
+'C:\\Users\\Antsthbul\\pushit\\tests\\pushtest1'
+>>> pushd
+- C:\Users\Antsthebul\Desktop\pushit\tests\pushtest1;
+0 pushtest2
+1 pushit
+```
+## *Specify* directory to be removed
+    
+-   *Feature unavailable*
+---
+### **pushit** 
+>Where it all comes together..
+
+## *no args*
+-   The *pushd queue* **must** be populated
+
+```python
+>>> pushd('tests', chdir=False)
+>>> pushd('tests/pushtest1', chdir=False) 
+>>> pushd('tests/pushtest1/pushtest2', chdir=False) 
+>>> pushd()
+>>> pushd
+- C:\Users\Antsthebul\Desktop\\pushit;
+0 pushtest2
+1 pushtest1
+2 tests
+3 pushit
+
+>>> with pushit() as lvl1:
+...    print('Do stuff here')
+...    print(os.getcwd())
+...    print()
+...    with pushit() as lvl2:
+...        print('Do more stuff here')
+...        print(os.getcwd())
+...        print()
+...        with pushit() as lvl3:
+...            print('OK i think you get the idea')
+...            print(os.getcwd())
+...            print()
+...        print('Back in lvl2')
+...        print(lvl2)
+...    print('inside lvl1')
+...    print(lvl1)
+
+
+
+Do stuff here
+C:\Users\Antsthebul\Desktop\pushit\tests\pushtest1\pushtest2
+
+Do more stuff here
+C:\Users\Ansthebul\Desktop\pushit\tests\pushtest1
+
+OK i think you get the idea
+C:\Users\Ansthebul\Desktop\pushit\tests
+
+Back in lvl2
+- C:\Users\Ansthebul\Desktop\pushit\tests\pushtest1;
+
+inside lvl1
+- C:\Users\Ansthebul\Desktop\pushit\tests\pushtest1\pushtest2;
+0 pushit
+
+>>> pushd
+- C:\Users\Ansthebul\Desktop\pushit;
+0 pushit
+
+>>> os.getcwd()
+C:\Users\Antsthebul\Desktop\pushit
+```
+## *with args*
+```python
+>>> pushd
+- C:\Users\Antsthebul\Desktop\\pushit;
+>>> with pushit('tests/pushtest1/pushest2'):
+...     print(os.getcwd())
+C:\Users\Antsthebul\Desktop\pushit\tests\pushtest1\pushtest2
+>>> os.getcwd()
+'C:\\Users\\Antsthebul\\Desktop\\pushit'
+```
